@@ -80,6 +80,16 @@ USUARIOS PARA TORNEO
     </mat-select>
   </mat-form-field>
 
+  <h4>Basic mat-select with initial value</h4>
+  <mat-form-field appearance="fill">
+    <mat-label>Comportamiento de juego</mat-label>
+    <mat-select [(value)]="comportamiento">
+      <mat-option></mat-option>
+      <mat-option [value]="option.value" *ngFor="let option of comportamientos">{{ option.value }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <p>You selected: {{comportamiento}}</p>
+
 <button mat-button color="primary" (click)="onClick()">Generar torneos</button>
     
 <br><br>

@@ -29,6 +29,10 @@ export interface partida {
   torneo:number
 }
 
+interface Comportamiento {
+  value: string;  
+}
+
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
@@ -42,10 +46,18 @@ export class ContactComponent implements OnInit {
 
   partida_data: partida[];
 
+  comportamientos: Comportamiento[] = [
+    {value: 'simular'},
+    {value: 'generar'}    
+  ];
+
+  comportamiento = this.comportamientos[1].value;
+
   public juegoId = new FormControl('', [Validators.required]);
 
   url_usuarios: string ="http://104.155.167.93:8000/"
   url_torneo:string = "http://104.155.167.93:8002/"
+  url_token:string = "http://35.202.77.9/"
   displayedColumns: string[] = ['id', 'nombres','apellidos', 'administrador', 'email'];
   dataSource:any;
   displayedColumnspartidas: string[] = ['torneo', 'uuid', 'jugador1', 'jugador1_punteo', 'jugador2', 'jugador2_punteo','completada'];
@@ -55,7 +67,7 @@ export class ContactComponent implements OnInit {
 
   ngOnInit(): void {
     const params = new Map<string, string>();   
-    this.restService.getWithParams(this.url_usuarios, 'jugadores','',params).subscribe(
+    this.restService.getWithParamsWithHeader(this.url_usuarios, 'jugadores','',params).subscribe(
       response => {
         const r: any = response;
         console.log(response)
@@ -69,7 +81,7 @@ export class ContactComponent implements OnInit {
         console.error(JSON.stringify(error));
     });
 
-    this.restService.getWithParams(this.url_torneo, 'juego','',params).subscribe(
+    this.restService.getWithParamsWithOutHeader(this.url_torneo, 'juego','',params).subscribe(
       response => {
         console.log(response['juegos'])
         this.juegos = response['juegos'];
@@ -77,7 +89,7 @@ export class ContactComponent implements OnInit {
         console.error(JSON.stringify(error));
     });
 
-    this.restService.getWithParams(this.url_torneo, 'partidas','',params).subscribe(
+    this.restService.getWithParamsWithOutHeader(this.url_torneo, 'partidas','',params).subscribe(
       response => {
         console.log(response['partidas'])
         this.dataSourcePartidas=response['partidas'];
@@ -102,7 +114,7 @@ export class ContactComponent implements OnInit {
   
   onClick():void{
     const params = new Map<string, string>();
-    this.restService.insertObject(this.url_torneo, 'torneo', { juego:this.juegoId.value, usuarios:this.usuarios},params).subscribe(
+    this.restService.insertObject(this.url_torneo, 'torneo', {type:this.comportamiento, juego:this.juegoId.value, usuarios:this.usuarios},params).subscribe(
       response => {
         alert("Torneo creado")
     }, error => {

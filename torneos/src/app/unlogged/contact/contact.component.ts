@@ -19,6 +19,16 @@ export interface Juego {
   ip: string;
 }
 
+export interface partida {
+  jugador1:string;
+  jugador1_punteo:number;
+  jugador2:string;
+  jugador2_punteo:number;
+  uuid:string;
+  completada:false;
+  torneo:number
+}
+
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
@@ -27,8 +37,10 @@ export interface Juego {
 export class ContactComponent implements OnInit {
 
   tasks: Task[];
-  usuarios: number[] =[];''
+  usuarios: number[] =[];
   juegos: Juego[];
+
+  partida_data: partida[];
 
   public juegoId = new FormControl('', [Validators.required]);
 
@@ -36,6 +48,8 @@ export class ContactComponent implements OnInit {
   url_torneo:string = "http://104.155.167.93:8002/"
   displayedColumns: string[] = ['id', 'nombres','apellidos', 'administrador', 'email'];
   dataSource:any;
+  displayedColumnspartidas: string[] = ['torneo', 'uuid', 'jugador1', 'jugador1_punteo', 'jugador2', 'jugador2_punteo','completada'];
+  dataSourcePartidas :any;  
 
   constructor(private restService: RestManagerService) { }
 
@@ -59,6 +73,14 @@ export class ContactComponent implements OnInit {
       response => {
         console.log(response['juegos'])
         this.juegos = response['juegos'];
+    }, error => {
+        console.error(JSON.stringify(error));
+    });
+
+    this.restService.getWithParams(this.url_torneo, 'partidas','',params).subscribe(
+      response => {
+        console.log(response['partidas'])
+        this.dataSourcePartidas=response['partidas'];
     }, error => {
         console.error(JSON.stringify(error));
     });
@@ -86,5 +108,10 @@ export class ContactComponent implements OnInit {
     }, error => {
         console.error(JSON.stringify(error));
     });
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSourcePartidas.filter = filterValue.trim().toLowerCase();
   }
 }

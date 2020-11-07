@@ -82,3 +82,62 @@ USUARIOS PARA TORNEO
 
 <button mat-button color="primary" (click)="onClick()">Generar torneos</button>
     
+<br><br>
+
+<mat-form-field>
+  <mat-label>Filtro</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Partida" #input>
+</mat-form-field>
+
+<table mat-table [dataSource]="dataSourcePartidas" class="mat-elevation-z8">
+
+  <!-- Position Column -->
+  <ng-container matColumnDef="torneo">
+    <th mat-header-cell *matHeaderCellDef> Id Torneo </th>
+    <td mat-cell *matCellDef="let element"> {{element.torneo}} </td>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="uuid">
+    <th mat-header-cell *matHeaderCellDef> UUID </th>
+    <td mat-cell *matCellDef="let element"> {{element.uuid}} </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="jugador1">
+    <th mat-header-cell *matHeaderCellDef> Jugador 1 </th>
+    <td mat-cell *matCellDef="let element"> {{element.jugador1}} </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="jugador1_punteo">
+    <th mat-header-cell *matHeaderCellDef> Punteo jugador 1 </th>
+    <td mat-cell *matCellDef="let element"> {{element.jugador1_punteo}} </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="jugador2">
+    <th mat-header-cell *matHeaderCellDef> Jugador 2 </th>
+    <td mat-cell *matCellDef="let element"> {{element.jugador2}} </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="jugador2_punteo">
+    <th mat-header-cell *matHeaderCellDef> Punteo jugador 2 </th>
+    <td mat-cell *matCellDef="let element"> {{element.jugador2_punteo}} </td>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="completada">
+    <th mat-header-cell *matHeaderCellDef> Completado </th>
+    <td mat-cell *matCellDef="let element"> {{element.completada}} </td>
+  </ng-container>
+ 
+  <tr mat-header-row *matHeaderRowDef="displayedColumnspartidas"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumnspartidas;"></tr>
+
+  <!-- Row shown when there is no matching data. -->
+  <tr class="mat-row" *matNoDataRow>
+    <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+  </tr>
+</table>
